@@ -1,0 +1,334 @@
+/* =========================================
+   RESPONSIVE.CSS
+   
+   Este archivo contiene estilos específicos para 
+   diferentes tamaños de pantalla, optimizando
+   la experiencia en dispositivos móviles
+   ========================================= */
+
+/* =========================================
+   TABLA DE CONTENIDOS:
+   1. Breakpoints principales
+   2. Ajustes para tablets (768px)
+   3. Ajustes para móviles (480px)
+   4. Ajustes para móviles pequeños (320px)
+   5. Optimizaciones táctiles
+   6. Correcciones específicas de navegadores
+   ========================================= */
+
+/* =========================================
+   1. BREAKPOINTS PRINCIPALES
+   ========================================= */
+
+/* Tablets y pantallas medianas */
+@media (max-width: 1024px) {
+    .container {
+        width: 95%;
+        padding: 10px;
+    }
+    
+    .dashboard-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* =========================================
+   2. AJUSTES PARA TABLETS (768px)
+   ========================================= */
+@media (max-width: 768px) {
+    /* Layout principal */
+    .container {
+        margin: 0;
+        padding: 10px;
+        border-radius: 0;
+        width: 100%;
+        box-shadow: none;
+    }
+    
+    /* Sistema de pestañas */
+    .tabs {
+        flex-direction: column;
+        padding: 5px;
+        gap: 5px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background-color: var(--bg);
+    }
+
+    .nav-button {
+        width: 100%;
+        padding: 12px 15px;
+        text-align: left;
+        justify-content: flex-start;
+        border-radius: 0;
+        margin: 2px 0;
+    }
+    
+    /* Contenido de pestañas */
+    .tabcontent {
+        padding: 10px;
+        border-radius: 0;
+        box-shadow: none;
+    }
+    
+    /* Formularios */
+    .form-group {
+        margin-bottom: 10px;
+    }
+    
+    .vendedor-form,
+    .jefe-form {
+        grid-template-columns: 1fr;
+        padding: 10px;
+    }
+    
+    /* Botones y acciones */
+    .button-group {
+        padding: 4px;
+        gap: 4px;
+    }
+    
+    .btn-pre-procesar,
+    .btn-reprocesar,
+    .btn-procesar,
+    .btn-agregar,
+    .btn-calculadora {
+        min-width: calc(50% - 4px);
+        padding: 10px;
+    }
+    
+    /* Mensajes */
+    .mensaje-form {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .mensaje-form > * {
+        width: 100%;
+    }
+    
+    /* Modales */
+    .modal-content {
+        width: 95%;
+        max-height: 90vh;
+        padding: 10px;
+    }
+}
+
+/* =========================================
+   3. AJUSTES PARA MÓVILES (480px)
+   ========================================= */
+@media (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+        margin: 10px 0;
+    }
+    
+    h3 {
+        font-size: 1.2rem;
+    }
+    
+    /* Ajustes específicos de UI */
+    .vendedor-item, 
+    .jefe-item {
+        padding: 10px;
+    }
+    
+    /* Formularios compactos */
+    input, select, textarea, button {
+        padding: 10px;
+        font-size: 16px; /* Prevenir zoom en iOS */
+    }
+    
+    .mensaje-textarea {
+        min-height: 100px;
+    }
+    
+    /* Botones más grandes para táctil */
+    button {
+        padding: 12px;
+        min-height: 44px;
+    }
+    
+    /* Calculadora */
+    .calculadora-content {
+        width: 95%;
+        max-width: none;
+        height: 90vh;
+        padding: 10px;
+    }
+    
+    .calc-main-container {
+        height: calc(90vh - 120px);
+    }
+    
+    /* Selector de fechas */
+    .fecha-inputs div {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .fecha-inputs input[type="date"],
+    .fecha-inputs select {
+        width: 100%;
+    }
+    
+    /* Flotar botón de acción principal */
+    .btn-floating-action {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background-color: var(--primary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        z-index: 10;
+        font-size: 24px;
+    }
+}
+
+/* =========================================
+   4. AJUSTES PARA MÓVILES PEQUEÑOS (320px)
+   ========================================= */
+@media (max-width: 320px) {
+    .button-group {
+        flex-direction: column;
+    }
+    
+    .button-group button {
+        width: 100%;
+        margin-bottom: 4px;
+        min-width: 100%;
+    }
+    
+    .container {
+        padding: 8px;
+    }
+    
+    /* Ajustes de calculadora para pantallas muy pequeñas */
+    .calculadora-content {
+        width: 100%;
+        padding: 8px;
+        border-radius: 0;
+    }
+    
+    .calculadora-btn {
+        font-size: 14px;
+        padding: 10px;
+    }
+    
+    /* Simplificar elementos y reducir padding */
+    .tabcontent,
+    .vendedor-form,
+    .jefe-form {
+        padding: 5px;
+    }
+}
+
+/* =========================================
+   5. OPTIMIZACIONES TÁCTILES
+   ========================================= */
+@media (hover: none) and (pointer: coarse) {
+    /* Aumentar área táctil */
+    button, 
+    a, 
+    .nav-button,
+    input[type="checkbox"],
+    input[type="radio"],
+    select {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* Quitar efectos hover que pueden causar problemas en táctil */
+    button:hover,
+    .nav-button:hover {
+        transform: none;
+    }
+    
+    /* Aumentar espaciado para dedos */
+    td, th {
+        padding: 10px 8px;
+    }
+    
+    /* Aumentar espacio entre elementos clickeables */
+    .vendedor-buttons button,
+    .jefe-buttons button {
+        margin: 5px;
+    }
+    
+    /* Eliminar highlight táctil */
+    button, a, input, select {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+}
+
+/* =========================================
+   6. CORRECCIONES ESPECÍFICAS DE NAVEGADORES
+   ========================================= */
+
+/* Correcciones para Safari en iOS */
+@supports (-webkit-touch-callout: none) {
+    /* Prevenir scroll bounce */
+    html, body {
+        position: fixed;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .container {
+        height: 100%;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Corregir posición de modales */
+    .modal, .calculadora-modal {
+        position: absolute;
+    }
+}
+
+/* Firefox */
+@-moz-document url-prefix() {
+    .calc-excel-input {
+        box-sizing: border-box;
+    }
+}
+
+/* Chromium (Chrome, Edge) */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    /* Selects específicos para Chrome/Edge */
+    select {
+        background-color: var(--light);
+        -webkit-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml;utf8,<svg fill='%23333' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+        background-repeat: no-repeat;
+        background-position: right 8px center;
+        padding-right: 30px;
+    }
+    
+    .dark-mode select {
+        background-color: var(--dark);
+        background-image: url("data:image/svg+xml;utf8,<svg fill='%23fff' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+    }
+}
+
+/* Optimizaciones de rendimiento para todos los dispositivos */
+.nav-button, button, .modal, .calculadora-modal {
+    will-change: transform;
+    backface-visibility: hidden;
+}

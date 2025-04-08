@@ -1,0 +1,2105 @@
+/* ===========================================
+   ÍNDICE DE SECCIONES
+   ===========================================
+   1. Variables y Configuración Base
+   2. Layout Principal
+   3. Sistema de Pestañas y Navegación
+   4. Botones y Acciones
+   5. Formularios y Campos
+   6. Modo Oscuro
+   7. Mensajes y Validación
+   8. Jefes y Vendedores
+   9. Estadísticas y Gráficos
+   10. Tooltips y Modales
+   11. Calculadora
+   12. Responsive Design
+   13. Animaciones
+   14. Backup y Configuración
+   15. Mensajes Interactivos
+   =========================================== */
+
+/* ==========================================
+   1. VARIABLES Y CONFIGURACIÓN BASE
+   ========================================== */
+   :root {
+    /* Colores principales */
+    --primary-color: #1565c0;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+
+    /* Nuevos colores para tipos de mensajes */
+    --color-lineas: #e91e63;      /* Rosa */
+    --color-lineasy: #9c27b0;     /* Morado */
+    --color-terminal: #2196f3;    /* Azul */
+    --color-parley: #4caf50;      /* Verde */
+    --color-super: #ff9800;       /* Naranja */
+    --color-pick3: #795548;       /* Marrón */
+    --color-pick4: #607d8b;       /* Azul grisáceo */
+    --color-reventados: #f44336;  /* Rojo */
+
+    /* Gradientes */
+    --primary-gradient: linear-gradient(135deg, #1976d2, #1565c0);
+    --secondary-gradient: linear-gradient(135deg, #78909c, #546e7a);
+    --success-gradient: linear-gradient(135deg, #2e7d32, #1b5e20);
+    --info-gradient: linear-gradient(135deg, #0288d1, #0277bd);
+    --bg-gradient: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+    --card-bg-gradient: linear-gradient(135deg, #ffffff, #f8f9fa);
+
+    /* Sombras */
+    --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.05);
+    --button-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    --hover-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
+
+    /* Variables para modos claro/oscuro */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --text-primary: #333333;
+    --border-color: #dee2e6;
+    --input-bg: #ffffff;
+    --primary-color-dark: #0d47a1;
+}
+
+/* Estilos para cada tipo de mensaje */
+.mensaje-lineas {
+    background-color: rgba(233, 30, 99, 0.1);
+    color: var(--color-lineas);
+    border-left: 4px solid var(--color-lineas);
+}
+
+.mensaje-lineasy {
+    background-color: rgba(156, 39, 176, 0.1);
+    color: var(--color-lineasy);
+    border-left: 4px solid var(--color-lineasy);
+}
+
+.mensaje-terminal {
+    background-color: rgba(33, 150, 243, 0.1);
+    color: var(--color-terminal);
+    border-left: 4px solid var(--color-terminal);
+}
+
+.mensaje-parley {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: var(--color-parley);
+    border-left: 4px solid var(--color-parley);
+}
+
+.mensaje-super {
+    background-color: rgba(255, 152, 0, 0.1);
+    color: var(--color-super);
+    border-left: 4px solid var(--color-super);
+}
+
+.mensaje-pick3 {
+    background-color: rgba(121, 85, 72, 0.1);
+    color: var(--color-pick3);
+    border-left: 4px solid var(--color-pick3);
+}
+
+.mensaje-pick4 {
+    background-color: rgba(96, 125, 139, 0.1);
+    color: var(--color-pick4);
+    border-left: 4px solid var(--color-pick4);
+}
+
+.mensaje-reventados {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: var(--color-reventados);
+    border-left: 4px solid var(--color-reventados);
+}
+
+/* Efectos hover para los mensajes */
+.mensaje-lineas:hover,
+.mensaje-lineasy:hover,
+.mensaje-terminal:hover,
+.mensaje-parley:hover,
+.mensaje-super:hover,
+.mensaje-pick3:hover,
+.mensaje-pick4:hover,
+.mensaje-reventados:hover {
+    transform: translateX(-5px);
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Modo oscuro */
+.dark-mode .mensaje-lineas,
+.dark-mode .mensaje-lineasy,
+.dark-mode .mensaje-terminal,
+.dark-mode .mensaje-parley,
+.dark-mode .mensaje-super,
+.dark-mode .mensaje-pick3,
+.dark-mode .mensaje-pick4,
+.dark-mode .mensaje-reventados {
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Animaciones para los mensajes */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Estilos adicionales para los mensajes */
+.mensaje {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.mensaje-icono {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+.mensaje-texto {
+    flex: 1;
+    font-weight: 500;
+}
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: var(--bg-gradient);
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* ==========================================
+   2. LAYOUT PRINCIPAL
+   ========================================== */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background: var(--card-bg-gradient);
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+}
+
+.dashboard-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.summary-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ==========================================
+   3. SISTEMA DE PESTAÑAS Y NAVEGACIÓN
+   ========================================== */
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.nav-button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+    font-weight: 500;
+    text-align: center;
+    width: auto;
+    min-width: 150px;
+    background-color: var(--primary-color);
+}
+
+.nav-button.bienvenida {
+    background-color: #dc3545;
+}
+
+.nav-button.mensajes {
+    background-color: #1565c0;
+}
+
+.nav-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+}
+
+.nav-button.active {
+    background: var(--success-gradient);
+}
+
+.tabcontent {
+    display: none;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ==========================================
+   4. BOTONES Y ACCIONES
+   ========================================== */
+/* Estilos base para todos los botones */
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    margin: 5px;
+}
+
+/* Botones de acción (tipo export-button) - ESTILO PRINCIPAL QUE PIDES */
+.export-button {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 4px;
+    padding: 10px 15px;
+    text-align: center;
+    font-weight: 500;
+    box-shadow: var(--button-shadow);
+    transition: all 0.3s ease;
+    margin: 5px;
+    min-width: 120px;
+    flex: 1;
+}
+
+.export-button:hover {
+    background-color: #1976d2;
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+}
+
+/* Botones de estadísticas */
+.stats-button {
+    background-color: #17a2b8;
+    color: white;
+    border-radius: 4px;
+    padding: 10px 15px;
+    text-align: center;
+    font-weight: 500;
+    box-shadow: var(--button-shadow);
+    transition: all 0.3s ease;
+    margin: 5px;
+    min-width: 120px;
+    flex: 1;
+}
+
+.stats-button:hover {
+    background-color: #138496;
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+}
+
+/* Otros tipos de botones */
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    min-width: 120px;
+    flex: 1;
+}
+
+.btn-primary:hover {
+    background-color: #1976d2;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+    min-width: 120px;
+    flex: 1;
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.btn-info {
+    background-color: var(--info-color);
+    color: white;
+    min-width: 120px;
+    flex: 1;
+}
+
+.btn-info:hover {
+    background-color: #138496;
+    transform: translateY(-2px);
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+/* Estilos para la sección de botones en mensajes */
+.button-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+    padding: 8px;
+}
+
+/* Estilos específicos para botones de acción */
+.btn-pre-procesar,
+.btn-reprocesar,
+.btn-procesar,
+.btn-agregar,
+.btn-calculadora {
+    flex: 1;
+    min-width: calc(33% - 8px);
+    padding: 12px;
+    margin: 0;
+    font-size: 14px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+/* Colores específicos para cada botón */
+.btn-pre-procesar {
+    background-color: #6c757d;
+}
+
+.btn-reprocesar {
+    background-color: #17a2b8;
+}
+
+.btn-procesar {
+    background-color: #1565c0;
+}
+
+.btn-agregar {
+    background-color: #28a745;
+}
+
+.btn-calculadora {
+    background-color: #6c757d;
+}
+
+/* Tema para botones */
+.btn-theme {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+    max-width: 300px;
+}
+
+.btn-theme:hover {
+    background-color: var(--primary-color);
+}
+
+/* ==========================================
+   5. FORMULARIOS Y CAMPOS
+   ========================================== */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(21, 101, 192, 0.1);
+}
+
+.mensaje-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.mensaje-input-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.mensaje-textarea {
+    width: 100%;
+    min-height: 190px;
+    resize: vertical;
+}
+
+.validation-indicator {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+/* ==========================================
+   6. MODO OSCURO
+   ========================================== */
+.dark-mode {
+    background: linear-gradient(135deg, #2d2d2d, #1a1a1a);
+    color: #ffffff;
+
+    /* Actualización de variables para modo oscuro */
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --text-primary: #ffffff;
+    --border-color: #404040;
+    --input-bg: #333333;
+}
+
+.dark-mode .container {
+    background: linear-gradient(135deg, #3d3d3d, #2d2d2d);
+}
+
+.dark-mode .tabcontent {
+    background: #444;
+    color: #fff;
+}
+
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+    background: #2d2d2d;
+    color: #fff;
+    border-color: #555;
+}
+
+.dark-mode .summary-card {
+    background: #3d3d3d;
+    border: 1px solid #444;
+}
+
+.dark-mode .tabs {
+    background: #2d2d2d;
+}
+
+.dark-mode .options-section {
+    background: #333;
+    border-color: #444;
+}
+
+.dark-mode .options-section h3 {
+    color: #fff;
+}
+
+.dark-mode .backup-settings {
+    background: #2d2d2d;
+}
+
+.dark-mode .backup-info {
+    background: #1b5e20;
+    color: white;
+}
+
+.dark-mode .modal-content {
+    background-color: #333;
+    color: #fff;
+}
+
+.dark-mode .modal-header h3 {
+    color: #fff;
+}
+
+.dark-mode .close-modal {
+    color: #fff;
+}
+
+.dark-mode .modal-footer {
+    border-top-color: #444;
+}
+
+.dark-mode .form-select {
+    background-color: #333;
+    color: #fff;
+    border-color: #555;
+}
+
+.dark-mode .section-card {
+    background: linear-gradient(135deg, #454545, #3d3d3d);
+}
+
+.dark-mode .section-title {
+    color: #90caf9;
+    border-bottom-color: #404040;
+}
+
+.dark-mode .backup-config {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .stats-card {
+    background: #2d2d2d;
+    color: #fff;
+    border: 1px solid #404040;
+}
+
+.dark-mode .info-section {
+    background: #2d2d2d;
+    border-color: #444;
+}
+
+.dark-mode .calculadora-content {
+    background-color: #333;
+    color: #fff;
+}
+
+/* ==========================================
+   7. MENSAJES Y VALIDACIÓN
+   ========================================== */
+   .mensajes-container {
+    margin-top: 10px;
+}
+
+.mensajes-no-procesados {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 8px;
+}
+
+.dark-mode .mensajes-no-procesados {
+    background: #2d2d2d;
+}
+
+.mensajes-no-procesados h3 {
+    margin-bottom: 10px;
+}
+
+#mensajesNoProcesadosTextarea {
+    width: 100%;
+    min-height: 100px;
+    margin-bottom: 10px;
+}
+
+.actions-container {
+    display: flex;
+    gap: 10px;
+}
+
+.venta-summary {
+    margin: 15px 0;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+}
+
+.dark-mode .venta-summary {
+    background-color: #2d2d2d;
+}
+
+.analisis-container {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    display: none;
+    max-height: 500px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.jugada-container {
+    margin-bottom: 10px;
+    padding: 15px;
+    background-color: #2d2d2d;
+    border-radius: 6px;
+    border-left: 4px solid #3b82f6;
+}
+
+.jugada-original {
+    color: #4ade80;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.jugada-tipo {
+    color: #60a5fa;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.jugada-detalles {
+    color: #ffffff;
+    font-family: monospace;
+    line-height: 1.5;
+}
+
+.venta-total {
+    color: #fbbf24;
+    margin: 5px 0;
+}
+
+.numeros-detalle {
+    margin-top: 5px;
+    padding: 5px;
+    background-color: #374151;
+    border-radius: 4px;
+}
+
+.mensaje-error {
+    color: #ef4444;
+    padding: 10px;
+    background-color: #374151;
+    border-radius: 4px;
+}
+
+/* ==========================================
+   8. JEFES Y VENDEDORES
+   ========================================== */
+.vendedor-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+    background-color: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.vendedor-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.vendedor-form label {
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.vendedor-form input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--input-bg);
+    color: var(--text-primary);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.vendedor-lista {
+    margin-top: 2rem;
+}
+
+.vendedor-item {
+    background-color: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.vendedor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.vendedor-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.jefe-form {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex: 1;
+}
+
+.jefe-select-container {
+    margin-top: 0;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 1rem;
+    width: auto;
+}
+
+.jefe-select-container label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+#jefeVendedorSelect {
+    width: 100%;
+    min-height: 100px;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--input-bg);
+    color: var(--text-primary);
+}
+
+.jefe-info {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.dark-mode .jefe-info {
+    background-color: #333;
+}
+
+/* ==========================================
+   9. ESTADÍSTICAS Y GRÁFICOS
+   ========================================== */
+.date-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: flex-end;
+}
+
+.date-filters .form-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.stats-card {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart {
+    width: 100%;
+    height: 300px;
+    margin-top: 15px;
+}
+
+.stats-summary {
+    margin-top: 30px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+}
+
+/* ==========================================
+   10. TOOLTIPS Y MODALES
+   ========================================== */
+.tooltip-system {
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    max-width: 250px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.2s ease-in-out;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.tooltip::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+}
+
+.tooltip.right {
+    margin-left: 8px;
+}
+
+.tooltip.right::before {
+    left: -12px;
+    top: 50%;
+    margin-top: -6px;
+    border-right-color: rgba(0, 0, 0, 0.8);
+}
+
+.tooltip.left {
+    margin-right: 8px;
+}
+
+.tooltip.left::before {
+    right: -12px;
+    top: 50%;
+    margin-top: -6px;
+    border-left-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    animation: slideDown 0.3s ease-out;
+    max-width: 500px;
+    width: 90%;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+}
+
+.close-modal:hover {
+    color: var(--danger-color);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+/* Selector de fecha */
+.fecha-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.fecha-inputs div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fecha-inputs input[type="date"],
+.fecha-inputs select {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 60%;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+/* Animaciones para modales */
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ==========================================
+   11. CALCULADORA
+   ========================================== */
+.calculadora-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1100;
+}
+
+.calculadora-content {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    width: 320px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.calculadora-display {
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    text-align: right;
+    font-size: 24px;
+}
+
+.calculadora-botones {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.calculadora-btn {
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #f0f0f0;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+/* ==========================================
+   12. RESPONSIVE DESIGN
+   ========================================== */
+@media (max-width: 768px) {
+    .container {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .tabs {
+        flex-direction: column;
+        padding: 5px;
+        gap: 5px;
+        margin: 10px 5px;
+    }
+
+    .nav-button {
+        width: 100%;
+        min-width: unset;
+        padding: 15px;
+        margin: 0;
+        font-size: 16px;
+        border-radius: 6px;
+        text-align: left;
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-button.bienvenida {
+        order: -1; /* Asegura que Bienvenida aparezca primero */
+    }
+
+    .mensaje-form,
+    .vendedor-form {
+        flex-direction: column;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .button-group {
+        padding: 4px;
+        gap: 4px;
+    }
+
+    .btn-pre-procesar,
+    .btn-reprocesar,
+    .btn-procesar,
+    .btn-agregar,
+    .btn-calculadora {
+        min-width: calc(50% - 4px); /* 2 botones por fila con gap de 4px */
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .date-filters {
+        flex-direction: column;
+    }
+
+    .export-button, 
+    .stats-button, 
+    .btn-primary, 
+    .btn-secondary,
+    .btn-info {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .jefe-form {
+        grid-template-columns: 1fr;
+    }
+
+    .jefe-select-container {
+        margin-left: 0;
+        margin-top: 1rem;
+        width: 100%;
+    }
+}
+
+/* Ajustes adicionales para pantallas muy pequeñas */
+@media (max-width: 320px) {
+    .nav-button {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    input, select, textarea {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .modal-content {
+        padding: 10px;
+    }
+
+    .btn-pre-procesar,
+    .btn-reprocesar,
+    .btn-procesar,
+    .btn-agregar,
+    .btn-calculadora {
+        min-width: calc(50% - 4px);
+        padding: 8px;
+        font-size: 12px;
+    }
+}
+
+/* ==========================================
+   13. ANIMACIONES
+   ========================================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.vendedor-form {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* ==========================================
+   14. BACKUP Y CONFIGURACIÓN
+   ========================================== */
+.options-section {
+    background: #f5f5f5;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+}
+
+.options-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    font-size: 1.2em;
+}
+
+.info-section {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.backup-settings {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.setting-group {
+    margin: 15px 0;
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 10px;
+    align-items: center;
+}
+
+.setting-group label {
+    font-weight: 500;
+}
+
+.setting-group input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.backup-info {
+    margin-top: 15px;
+    padding: 12px;
+    background: #e8f5e9;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 300px;
+}
+
+/* ==========================================
+   15. CALCULADORA DE NÚMEROS CON SUMA
+   ========================================== */
+   .calc-excel-container {
+    background-color: #333;
+    border-radius: 8px;
+    padding: 15px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.calc-excel-header {
+    display: flex;
+    background-color: #444;
+    font-weight: bold;
+    border-bottom: 1px solid #555;
+    color: #fff;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.calc-excel-cell {
+    padding: 8px 12px;
+    border-right: 1px solid #555;
+    flex: 1;
+    text-align: center;
+}
+
+.calc-excel-row {
+    display: flex;
+    border-bottom: 1px solid #555;
+}
+
+.calc-excel-input {
+    width: 100%;
+    border: none;
+    padding: 8px 0;
+    text-align: right;
+    outline: none;
+    background-color: #3a3a3a;
+    color: #fff;
+    /* Quitar flechas de incremento/decremento */
+    appearance: textfield; /* Propiedad estándar */
+    -moz-appearance: textfield; /* Versión con prefijo para Firefox */
+}
+
+/* Quitar flechas de incremento/decremento en Chrome, Safari, Edge, Opera */
+.calc-excel-input::-webkit-outer-spin-button,
+.calc-excel-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.calc-excel-footer {
+    display: flex;
+    background-color: #444;
+    font-weight: bold;
+    border-top: 1px solid #555;
+    color: #fff;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.calc-premio {
+    background-color: #3a464d;
+}
+
+.calc-premio-input {
+    background-color: #2c383f;
+    text-align: center;
+}
+
+/* Estilo para la fila activa */
+.calc-active-row {
+    background-color: #4a4a4a;
+}
+
+/* Mensaje de notificación */
+.calc-message {
+    background-color: #0078d7;
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    display: none;
+    font-size: 14px;
+}
+
+/* Estilo para placeholder */
+.calc-excel-input::placeholder {
+    color: #888;
+    opacity: 1;
+}
+
+#calc-addRowBtn {
+    background-color: #0078d7;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+#calc-addRowBtn:hover {
+    background-color: #0063b1;
+}
+
+/* Ajuste para el contenedor de la calculadora en el modal */
+.calculadora-content {
+    background-color: #333;
+    border-radius: 12px;
+    padding: 20px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    color: #fff;
+}
+
+/* Estilos específicos para el título de la calculadora */
+.calculadora-content h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #fff;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+/* Botón para cerrar la calculadora */
+.calc-close-btn {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.calc-close-btn:hover {
+    background-color: #c82333;
+}
+
+/* Estilos responsivos para móviles */
+@media (max-width: 600px) {
+    .calculadora-content {
+        width: 95%;
+        padding: 15px;
+    }
+    
+    .calc-excel-input {
+        font-size: 16px; /* Mejora la usabilidad en móviles */
+    }
+    
+    .calc-excel-cell {
+        padding: 8px 6px;
+    }
+}
+
+.calc-info-vendedor {
+    display: flex;
+    justify-content: space-between;
+    background-color: #e90e0e;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.calc-info-vendedor span {
+    font-size: 0.9em;
+}
+
+.calc-excel-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.calc-excel-cell {
+    flex: 1;
+}
+
+/* Botón fijo para transferir venta */
+#calc-addRowBtn {
+    position: sticky;
+    bottom: 10px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 1000;
+    margin-top: 10px;
+}
+
+/* Contenedor con scroll */
+#calc-excelRows {
+    max-height: 60vh;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+/* Para dispositivos móviles */
+@media (max-width: 768px) {
+    #calc-addRowBtn {
+        padding: 15px 20px;
+        font-size: 16px;
+        width: 100%;
+    }
+}
+
+/* Arreglo para el hover de las pestañas */
+.nav-button:hover {
+    background-color: #dc3545 !important; /* Color rojo para el hover */
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+}
+
+/* Estilos mejorados para botones 3D */
+.btn-primary, .btn-secondary, .btn-success, .btn-danger, .btn-info,
+.export-button, .stats-button, .btn-pre-procesar, .btn-reprocesar, 
+.btn-procesar, .btn-agregar, .btn-calculadora {
+    border: none;
+    border-radius: 6px;
+    padding: 12px 16px;
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Efecto 3D para botones */
+.btn-primary:before, .btn-secondary:before, .btn-success:before, 
+.btn-danger:before, .btn-info:before, .export-button:before,
+.stats-button:before, .btn-pre-procesar:before, .btn-reprocesar:before,
+.btn-procesar:before, .btn-agregar:before, .btn-calculadora:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+    pointer-events: none;
+}
+
+/* Efecto hover para todos los botones */
+.btn-primary:hover, .btn-secondary:hover, .btn-success:hover, 
+.btn-danger:hover, .btn-info:hover, .export-button:hover,
+.stats-button:hover, .btn-pre-procesar:hover, .btn-reprocesar:hover,
+.btn-procesar:hover, .btn-agregar:hover, .btn-calculadora:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Efecto active para todos los botones */
+.btn-primary:active, .btn-secondary:active, .btn-success:active, 
+.btn-danger:active, .btn-info:active, .export-button:active,
+.stats-button:active, .btn-pre-procesar:active, .btn-reprocesar:active,
+.btn-procesar:active, .btn-agregar:active, .btn-calculadora:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Colores específicos para los botones de la sección de mensajes */
+.btn-pre-procesar {
+    background: linear-gradient(to bottom, #7a8288, #6c757d);
+}
+
+.btn-reprocesar {
+    background: linear-gradient(to bottom, #20b2d8, #17a2b8);
+}
+
+.btn-procesar {
+    background: linear-gradient(to bottom, #1976d2, #1565c0);
+}
+
+.btn-agregar {
+    background: linear-gradient(to bottom, #2eca4e, #28a745);
+}
+
+.btn-calculadora {
+    background: linear-gradient(to bottom, #7a8288, #5a6268);
+}
+
+/* Botones principales con gradientes más pronunciados */
+.btn-primary {
+    background: linear-gradient(to bottom, #1976d2, #0d47a1);
+}
+
+.btn-secondary {
+    background: linear-gradient(to bottom, #7a8288, #5a6268);
+}
+
+.btn-success {
+    background: linear-gradient(to bottom, #2eca4e, #1b5e20);
+}
+
+.btn-danger {
+    background: linear-gradient(to bottom, #e04b59, #b71c1c);
+}
+
+.btn-info {
+    background: linear-gradient(to bottom, #20b2d8, #0277bd);
+}
+
+/* Estilos para export-button y stats-button */
+.export-button {
+    background: linear-gradient(to bottom, #1976d2, #0d47a1);
+}
+
+.stats-button {
+    background: linear-gradient(to bottom, #20b2d8, #0277bd);
+}
+
+/* Revertir el estilo active que cambia las pestañas a verde */
+.nav-button.active {
+    background: transparent !important; /* Anulamos el gradiente verde */
+}
+
+/* Estilo personalizado para las pestañas según su tipo */
+.nav-button.bienvenida.active {
+    background-color: #28a745 !important; /* Verde para Bienvenida */
+}
+
+.nav-button.mensajes.active {
+    background-color: #1565c0 !important; /* Azul para Mensajes */
+}
+
+/* Para todas las demás pestañas activas */
+.nav-button.active {
+    background-color: #dc3545 !important; /* Rojo para las pestañas activas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Efecto hover para pestañas */
+.nav-button:hover:not(.active) {
+    background-color: #dc3545 !important; /* Rojo al pasar el cursor */
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+}
+
+/* Estilos adicionales para las pestañas */
+.nav-button {
+    border: none;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Efecto de brillo superior para las pestañas */
+.nav-button:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 30%;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+    pointer-events: none;
+}
+
+/* Indicador de pestaña activa */
+.nav-button.active:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    width: 80%;
+    height: 3px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 3px 3px 0 0;
+}
+
+/* Mejoras para el formulario de Jefes de Vendedores */
+
+/* Estilo grid para el formulario de jefes - similar al de vendedores */
+.jefe-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+    background-color: #333; /* Color oscuro para modo oscuro */
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Mejoras para los inputs y labels */
+.jefe-form .form-group {
+    margin-bottom: 0; /* Eliminamos el margen para que se alinee bien en el grid */
+}
+
+.jefe-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.jefe-form input, 
+.jefe-form select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #555;
+    background-color: #2d2d2d;
+    color: white;
+    transition: all 0.3s ease;
+    font-size: 15px;
+}
+
+.jefe-form input:focus,
+.jefe-form select:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+    outline: none;
+}
+
+/* Contenedor principal con mejor layout */
+#Jefes .content-wrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
+
+/* Mejoras para el selector de jefe */
+.jefe-select-container {
+    background-color: #333;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-left: 0;
+    margin-top: 0;
+}
+
+.jefe-select-container label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: #fff;
+}
+
+#jefeSelect {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #555;
+    background-color: #2d2d2d;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+/* Mejora para la información del jefe */
+.jefe-info {
+    background-color: #3d3d3d;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border-left: 4px solid #1976d2;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón mejorado para agregar jefe */
+.jefe-form .btn-primary {
+    grid-column: 1 / -1; /* Que ocupe todo el ancho */
+    margin-top: 15px;
+    background: linear-gradient(to bottom, #1976d2, #0d47a1);
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+}
+
+.jefe-form .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    #Jefes .content-wrapper {
+        grid-template-columns: 1fr;
+    }
+    
+    .jefe-select-container {
+        margin-top: 20px;
+    }
+}
+
+/* Mejoras para compatibilidad móvil Chrome */
+
+/* Ajustes específicos para Chrome en Android */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    /* Mejora el comportamiento de toques en botones y controles */
+    .nav-button, button, select, input[type="text"], input[type="number"], input[type="date"] {
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        touch-action: manipulation;
+    }
+    
+    /* Prevenir el zoom de Chrome en inputs en iOS */
+    input, select, textarea {
+        font-size: 16px !important; /* Previene el zoom en inputs */
+    }
+    
+    /* Ajustes de estilo para botones en móvil */
+    .btn-pre-procesar, .btn-reprocesar, .btn-procesar, 
+    .btn-agregar, .btn-calculadora, .export-button, .btn-primary {
+        min-height: 44px; /* Altura mínima para facilitar el toque */
+    }
+    
+    /* Mejoras para las pestañas en móvil */
+    .nav-button {
+        padding: 15px 10px; /* Más espacio para tocar */
+    }
+    
+    /* Mejoras para formularios en pantallas pequeñas */
+    .jefe-form, .vendedor-form {
+        grid-template-columns: 1fr; /* Una sola columna en pantallas muy pequeñas */
+    }
+}
+
+/* Ajustes de viewport para dispositivos móviles pequeños */
+@media (max-width: 360px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .button-group {
+        flex-direction: column;
+    }
+    
+    .button-group button {
+        margin-bottom: 8px;
+        width: 100%;
+    }
+    
+    /* Ajuste para inputs numéricos */
+    input[type="number"] {
+        /* Versión estándar junto con los prefijos de proveedor */
+        appearance: textfield;
+        -webkit-appearance: textfield;
+        -moz-appearance: textfield;
+        margin: 0;
+    }
+}
+
+/* Mejoras específicas para orientación horizontal en móviles */
+@media (max-height: 450px) and (orientation: landscape) {
+    .tabcontent {
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+    
+    .nav-button {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+/* Corregir problemas de desplazamiento y overflow */
+body {
+    -webkit-overflow-scrolling: touch; /* Desplazamiento suave en iOS */
+    overflow-x: hidden; /* Prevenir desplazamiento horizontal */
+}
+
+/* Corregir problemas con position:fixed en Chrome móvil */
+.modal, .calculadora-modal, .notification-container {
+    position: fixed;
+    /* Usar la versión estándar junto con el prefijo */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+/* Optimizaciones de rendimiento para Chrome móvil */
+.nav-button, button, .btn-primary, .export-button {
+    will-change: transform; /* Mejora rendimiento de animaciones */
+    backface-visibility: hidden; /* Reduce parpadeos en animaciones */
+}
+
+/* ==========================================
+   ARREGLOS PARA CHROME MÓVIL
+   ========================================== */
+
+/* Asegurar que el fondo en todo el sitio es correcto en modo oscuro */
+body.dark-mode {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+}
+
+/* Asegurar que los contenedores respetan el modo oscuro */
+.dark-mode .container {
+    background: linear-gradient(135deg, #3d3d3d, #2d2d2d) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .tabcontent {
+    background-color: #444 !important;
+    color: #fff !important;
+}
+
+.dark-mode .tabs {
+    background-color: #2d2d2d !important;
+}
+
+.dark-mode input, 
+.dark-mode textarea, 
+.dark-mode select {
+    background-color: #2d2d2d !important;
+    color: #fff !important;
+    border-color: #555 !important;
+}
+
+/* Arreglar el problema de position:fixed en Chrome Android */
+.modal, 
+.calculadora-modal, 
+.notification-container,
+.tooltip-system {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    will-change: transform;
+}
+
+/* Mejoras para móvil */
+@media (max-width: 768px) {
+    /* Ajustes generales */
+    .container {
+        margin: 0;
+        padding: 10px;
+        border-radius: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* Redimensionar controles para facilitar el toque */
+    .button-group button,
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    .nav-button {
+        min-height: 44px;
+        font-size: 16px;
+    }
+    
+    /* Corregir el overflow */
+    body {
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Corregir las pestañas */
+    .tabs {
+        flex-direction: column;
+        padding: 5px;
+        gap: 5px;
+        margin: 10px 5px;
+    }
+    
+    .nav-button {
+        width: 100%;
+        min-width: unset;
+        padding: 15px;
+        margin: 0;
+        font-size: 16px;
+        border-radius: 6px;
+        text-align: left;
+    }
+    
+    /* Asegurar que las ventas se muestran correctamente */
+    .vendedor-lista {
+        margin-top: 10px;
+    }
+    
+    .vendedor-item, .jefe-item {
+        padding: 10px;
+    }
+
+    /* Ajustar botones en mensajes */
+    .button-group {
+        padding: 4px;
+        gap: 4px;
+    }
+    
+    .btn-pre-procesar,
+    .btn-reprocesar,
+    .btn-procesar,
+    .btn-agregar,
+    .btn-calculadora {
+        min-width: calc(50% - 4px);
+        min-height: 44px;
+    }
+}
+
+/* Ajustes para Chrome Android específicamente */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    input, select, textarea {
+        font-size: 16px !important; /* Previene zoom indeseado */
+    }
+    
+    /* Evitar highlight al tocar */
+    button, a, input, select {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+    
+    /* Arreglar posición de modales */
+    .modal, .calculadora-modal {
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+    }
+    
+    /* Mejorar la visualización en modo oscuro */
+    .dark-mode .modal-content,
+    .dark-mode .calculadora-content {
+        background-color: #333 !important;
+        color: #fff !important;
+    }
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 320px) {
+    .button-group {
+        flex-direction: column;
+    }
+    
+    .button-group button {
+        width: 100%;
+        margin-bottom: 4px;
+    }
+}
+
+/* Actualizaciones para centrar texto en botones y reducir tamaño */
+
+/* Estilo general para centrar texto en todos los botones */
+button, .nav-button, .btn-primary, .btn-secondary, .btn-success, 
+.btn-danger, .btn-info, .export-button, .stats-button, 
+.btn-pre-procesar, .btn-reprocesar, .btn-procesar, 
+.btn-agregar, .btn-calculadora {
+    text-align: center;
+    font-size: 13px; /* Reducir tamaño de texto */
+    font-weight: 600;
+    padding: 10px 12px;
+}
+
+/* Asegurar que los botones de la sección mensajes estén centrados */
+.button-group button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* Eliminar reglas redundantes y consolidar estilos */
+.btn-primary, .export-button {
+    background: linear-gradient(to bottom, #1976d2, #0d47a1);
+    color: white;
+}
+
+.btn-secondary, .btn-pre-procesar, .btn-calculadora {
+    background: linear-gradient(to bottom, #7a8288, #5a6268);
+    color: white;
+}
+
+.btn-success, .btn-agregar {
+    background: linear-gradient(to bottom, #2eca4e, #1b5e20);
+    color: white;
+}
+
+.btn-info, .stats-button, .btn-reprocesar {
+    background: linear-gradient(to bottom, #20b2d8, #0277bd);
+    color: white;
+}
+
+.btn-danger {
+    background: linear-gradient(to bottom, #e04b59, #b71c1c);
+    color: white;
+}
+
+.btn-procesar {
+    background: linear-gradient(to bottom, #1976d2, #1565c0);
+    color: white;
+}
+
+/* Ajustes para botones en móvil */
+@media (max-width: 768px) {
+    button, .nav-button, .btn-primary, .btn-secondary, .btn-success, 
+    .btn-danger, .btn-info, .export-button, .stats-button, 
+    .btn-pre-procesar, .btn-reprocesar, .btn-procesar, 
+    .btn-agregar, .btn-calculadora {
+        font-size: 12px; /* Aún más pequeño en móvil */
+        padding: 8px 10px;
+    }
+    
+    /* Alinear íconos en el centro cuando existan */
+    button i, button span, button img {
+        margin: 0 auto;
+    }
+}
+
+/* ==========================================
+   15. Mensajes Interactivos
+   ========================================== */
+/* Estilos para los diferentes tipos de jugadas */

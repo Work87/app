@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+   <title>Aplicación de Ventas</title>
+   <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive.css">
+      
+</head>
+<body class="dark-mode">
+    <!-- Indicador de carga -->
+    <div id="app-loader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <div class="container">
+        <!-- Sistema de Pestañas -->
+        <div class="tabs">
+            <button class="nav-button bienvenida active" onclick="openTab(event, 'Bienvenida')">Bienvenida</button>
+            <button class="nav-button mensajes" onclick="openTab(event, 'Mensajes')">Mensajes</button>
+            <button class="nav-button" onclick="openTab(event, 'Vendedores')">Vendedores</button>
+            <button class="nav-button" onclick="openTab(event, 'Jefes')">Jefes</button>
+            <button class="nav-button" onclick="openTab(event, 'Opciones')">Opciones</button>
+        </div>
+
+        <!-- Pestaña de Bienvenida -->
+        <div id="Bienvenida" class="tabcontent" style="display:block;">
+            <h2>Contro Ventas Loteria</h2>
+        </div>
+
+        <!-- Pestaña de Mensajes -->
+        <div id="Mensajes" class="tabcontent">
+            <h2>Mensajes</h2>
+            <!-- Nueva sección de mensajes con selector de fecha -->
+            <div class="mensaje-form">
+                <select id="vendedorSelect" onchange="updateVendedorInfo()" style="width: 40%;">
+                    <!-- Options will be populated dynamically -->
+                </select>
+                <input type="date" id="fechaVenta" style="width: 20%;" max="2025-12-31">
+                <select id="horarioSelect" style="width: 20%;">
+                    <option value="dia">Día ☀️</option>
+                    <option value="noche">Noche 🌙</option>
+                </select>
+                <input type="text" id="numeroGanador" maxlength="2" pattern="[0-9]*"
+                       inputmode="numeric" style="width: 15%;"
+                       oninput="validarNumero(this)" placeholder="00-99">
+            </div>
+
+            <div class="mensaje-input-container">
+                <textarea id="mensajeVenta" placeholder="Mensaje de Venta" class="mensaje-textarea" style="height: 190px;"></textarea>
+                <div class="validation-indicator"></div>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="button-group">
+                <button class="movil">Movil</button>
+                <button class="btn-pre-procesar" onclick="preProcesarPatrones()">Pre-procesar</button>
+                <button class="btn-procesar" onclick="procesarTextoCompleto()">Procesar Mensaje</button>
+                <button class="btn-reprocesar" onclick="reprocesarPatrones()">Reprocesar</button>
+                <button class="btn-procesar btn-calculadora" onclick="abrirCalculadora()">Excel</button>
+                <button id="btnMostrarAnalisis" class="btn-primary">Mostrar</button>
+                <button class="btn-agregar" onclick="agregarMensaje()">Agregar</button>
+            </div>
+
+            <div id="totalVenta" class="venta-summary"></div>
+
+            <div id="mensajesNoProcesadosSection" class="mensajes-no-procesados">
+                <h3>Mensajes No Procesados</h3>
+                <div class="mensajes-container">
+                    <textarea id="mensajesNoProcesadosTextarea"
+                              placeholder="Mensajes que no se pueden procesar"></textarea>
+                    <div class="mensajes-interactivos"></div>
+                </div>
+                <div class="actions-container">
+                    <button onclick="guardarMensajesNoProcesados()" class="btn-primary">Guardar Cambios</button>
+                    <button onclick="limpiarMensajesInvalidos()" class="btn-secondary">Limpiar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pestaña de Vendedores -->
+        <div id="Vendedores" class="tabcontent">
+            <h2>Vendedores</h2>
+            <div class="vendedor-form">
+                <div class="form-group">
+                    <label for="nombreVendedor">Nombre:</label>
+                    <input type="text" id="nombreVendedor" placeholder="Nombre del Vendedor">
+                </div>
+                <div class="form-group">
+                    <label for="precioVenta">Precio de Venta:</label>
+                    <input type="number" id="precioVenta" placeholder="Precio de Venta">
+                </div>
+                <div class="form-group">
+                    <label for="porcentaje">Porcentaje:</label>
+                    <input type="number" id="porcentaje" placeholder="Porcentaje">
+                </div>
+                <div class="form-group">
+                    <label for="fondo">Fondo:</label>
+                    <input type="number" id="fondo" placeholder="Fondo">
+                </div>
+            </div>
+
+            <div class="jefe-select-container">
+                <label for="jefeVendedorSelect">Jefes Asignados:</label>
+                <select id="jefeVendedorSelect" multiple>
+                    <!-- Options will be populated dynamically -->
+                </select>
+            </div>
+
+            <button onclick="agregarVendedor()" class="btn-primary">Agregar Vendedor</button>
+            <div id="listaVendedores" class="vendedor-lista"></div>
+        </div>
+
+        <div id="Jefes" class="tabcontent">
+            <h2>Jefes</h2>
+            
+            <div class="content-wrapper">
+                <!-- Formulario de Jefes -->
+                <div class="jefe-form">
+                    <div class="form-group">
+                        <label for="nombreJefe">Nombre:</label>
+                        <input type="text" id="nombreJefe" placeholder="Nombre del Jefe">
+                    </div>
+                    <div class="form-group">
+                        <label for="precioVentaJefe">Precio de Venta:</label>
+                        <input type="number" id="precioVentaJefe" placeholder="Precio de Venta">
+                    </div>
+                    <div class="form-group">
+                        <label for="porcentajeJefe">Porcentaje:</label>
+                        <input type="number" id="porcentajeJefe" placeholder="Porcentaje">
+                    </div>
+                    
+                    <button onclick="agregarJefe()" class="btn-primary">Agregar Jefe</button>
+                </div>
+                
+                <!-- Selector de Jefe -->
+                <div class="jefe-select-container">
+                    <label for="jefeSelect">Seleccionar Jefe:</label>
+                    <select id="jefeSelect" onchange="updateJefeInfo()">
+                        <!-- Options will be populated dynamically -->
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Información del Jefe -->
+            <div id="jefeInfo" class="jefe-info"></div>
+        </div>
+
+        <!-- Nueva Pestaña de Opciones -->
+        <div id="Opciones" class="tabcontent">
+            <h2>Opciones del Sistema</h2>
+
+            <!-- Tema -->
+            <div class="options-section">
+                <h3>Apariencia</h3>
+                <button onclick="toggleDarkMode()" class="btn-theme">
+                    Cambiar Modo (Claro/Oscuro)
+                </button>
+            </div>
+
+            <!-- Datos -->
+            <div class="options-section">
+                <h3>Gestión de Datos</h3>
+                <div class="button-group">
+                    <button id="borrarFondosBtn" class="export-button">Borrar Fondos de Vendedores</button>
+                    <button onclick="exportarHistorial()" class="export-button">Exportar Historial</button>
+                    <button onclick="document.getElementById('importFile').click()" class="export-button">Importar Historial</button>
+                    <input type="file" id="importFile" style="display: none;" onchange="importarHistorial(event)">
+                </div>
+            </div>
+
+            <!-- Configuración de Backup -->
+            <div class="backup-settings">
+                <h3>Configuración de Backup</h3>
+                <div class="setting-group">
+                    <label for="backupInterval">Intervalo de Backup (minutos):</label>
+                    <input type="number" id="backupInterval" min="1" value="1">
+                    <button onclick="actualizarIntervaloBackup()" class="btn-secondary">Actualizar</button>
+                </div>
+                <div id="lastBackupInfo" class="backup-info"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sistema de Notificaciones -->
+    <div id="notification-container" class="notification-container"></div>
+
+    <!-- Sistema Unificado de Tooltips -->
+    <div id="tooltip-system" class="tooltip-system" style="display: none;"></div>
+
+    <!-- Templates -->
+    <div id="tooltip-template" class="tooltip" style="display: none;">
+        <div class="tooltip-content"></div>
+    </div>
+
+    <div id="modal-template" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3></h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+
+    <div id="calculadora-template" class="calculadora-modal" style="display: none;">
+        <div class="calculadora-content">
+            <!-- El contenido de la calculadora se generará dinámicamente -->
+        </div>
+    </div>
+
+    <div id="modal-container"></div>
+    <!-- Script principal (se cargará adecuadamente según el tipo de dispositivo) -->
+    <!--<script src="script.js" defer></script> -->
+    </script>
+    <!-- Carga secuencial de módulos JavaScript -->
+    <script src="js/1-config.js"></script>
+    <script src="js/2-fechas.js"></script>
+    <script src="js/3-mensajes.js"></script>
+    <script src="js/4-vendedores.js"></script>
+    <script src="js/5-fondos.js"></script>
+    <script src="js/6-jefes.js"></script>
+    <script src="js/7-excel.js"></script>
+    <script src="js/8-ui.js"></script>
+</body>
+</html>

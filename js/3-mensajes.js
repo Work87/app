@@ -287,12 +287,13 @@ function procesarTerminalAl(linea, numeroGanador) {
 function procesarParejasConGanador(linea, numeroGanador) {
     if (!linea || typeof linea !== 'string') return null;
     linea = linea.toLowerCase().trim();
-    // Nueva expresión regular más precisa para ambos formatos
-    const patron = /^(p|pareja)([\s\/\-\.\+\:,])?\s*(\d+)$/;
+    // Nueva expresión regular más precisa para todos los formatos
+    const patron = /^(p|pareja)(?:[-., ]+(?:con[-., ]*)*(\d+)|[-., ]*(\d+))$/i;
 
-    if (patron.test(linea)) {
-        // Extraer el monto usando una expresión más simple
-        const monto = parseInt(linea.match(/\d+$/)[0]);
+    const matches = linea.match(patron);
+    if (matches) {
+        // El monto estará en el grupo 2 o 3, dependiendo del formato
+        const monto = parseInt(matches[2] || matches[3]);
 
         if (!isNaN(monto) && monto > 0) {
             return {
@@ -784,8 +785,9 @@ function movil() {
         mensajeVenta = mensajeVenta.replace(/\[.+?\]\s+[a-zA-Z0-9 ]*:\s/gm, 'SMS:\n');
         mensajeVenta = mensajeVenta.replace(/\s*([-.:,;])\s*([PaL])/g, '$1$2');
         mensajeVenta = mensajeVenta.replace(/([PaL])\s*([-.:,;])\s*/g, '$1$2');
-        mensajeVenta = mensajeVenta.replace(/\s+(?:von|com|cin|vin|con|c|de)\s+/gi, 'con');
+        mensajeVenta = mensajeVenta.replace(/[\*\+\_\¨\^\=\'\-]+(?:von|com|cin|vin|con|c|de)[\*\+\_\¨\^\=\'\-]+|[\*\+\_\¨\^\=\'\-]+(?:von|com|cin|vin|con|c|de)|(?:von|com|cin|vin|con|c|de)[\*\+\_\¨\^\=\'\-]+|\s+(?:von|com|cin|vin|con|c|de)\s+/gmi, '-con-')
         mensajeVenta = mensajeVenta.replace(/--con--/g, '-con-');
+        mensajeVenta = mensajeVenta.replace(/\[\d{2}[\/\-]\d{2}[\/\-]\d{4}\s+\d{1,2}[:|\-]\d{2}\s+[AP]M\](?:\s+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|\s+[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+\d+%\s+(?:Grupo|GruPo)\s+[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+[:|\-]):\s*/gmi, '\nsms\n');
 
         // Procesar cada línea del texto con ajustes específicos para móvil
         mensajeVenta = mensajeVenta.split('\n').map(line => {
@@ -793,8 +795,19 @@ function movil() {
             line = line
                 .replace(/\[\d{2}[\/\-]\d{2}[\/\-]\d{4}\s+\d{1,2}[:|\-]\d{2}\s+[AP]M\].*?(?:Grupo|GruPo).*?[:|\-]\s*/gmi, '\nsms\n')
                 .replace(/\[\d{2}[\/\-]\d{2}[\/\-]\d{4}\s+\d{1,2}[:|\-]\d{2}\s+[AP]M\].*?(?:Gru|GruPo).*?[:|\-]\s*/gmi, '\nsms\n')
-                .replace(/\[\d{2}[\/\-]\d{2}[\/\-]\d{4}\s+\d{1,2}[:|\-]\d{2}\s+[AP]M\]\s+[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+\d+%\s+(?:Grupo|GruPo)\s+[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+[:|\-]\s*/gmi, '\nsms\n');
-            
+                .replace(/\[\d{2}[\/\-]\d{2}[\/\-]\d{4}\s+\d{1,2}[:|\-]\d{2}\s+[AP]M\]\s+[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+\d+%\s+(?:Grupo|GruPo)\s+[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+[:|\-]\s*/gmi, '\nsms\n')
+                .replace(/(?<!Termin)[\*\+\_\¨\^\=\'\-]+(?:al|aL|Al|AL)[\*\+\_\¨\^\=\'\-]+|(?<!Termin)[\*\+\_\¨\^\=\'\-]+(?:al|aL|Al|AL)|(?<!Termin)(?:al|aL|Al|AL)[\*\+\_\¨\^\=\'\-]+|(?<!Termin)\s+(?:al|aL|Al|AL)\s+/gmi, '-aL-')
+                // Para casos de terminal con Y
+                .replace(/(?:terminal|t)[\s\-._]*(\d+)[\s\-._]*[yY][\s\-._]*(\d+)/gi, 'Terminal-$1-$2')
+                // Para números separados por Y (37 y 20 y 55 y 08)
+                .replace(/(\d+)[\s\-._]*[yY][\s\-._]*(?=\d)/gi, '$1-')
+                // Caso especial para Linea/L donde la Y debe quedar como -y-
+                .replace(/(?:linea|l)[\s\-._]*(\d+)[\s\-._]*[yY][\s\-._]*(\d+)/gi, 'Linea-$1-y-$2')
+                // Separar letras de números
+                .replace(/([a-zA-Z])(\d)/gi, '$1 $2')    // Letra seguida de número
+                .replace(/(\d)([a-zA-Z])/gi, '$1 $2')   // Número seguido de letra
+                // Bajar a nueva línea después de con y números
+                .replace(/c(?:on)?\W*(\d+)(\s*)(\W+)/gi, 'con-$1\n$2');
             return line;
         }).join('\n');
 
@@ -828,7 +841,7 @@ function preProcesarPatrones() {
             .replace(/\s+/g, ' ')
 
             // Reemplazar Pj- por P-
-            .replace(/Pj-/g, 'P-')
+            .replace(/Pj-/gi, 'P-')
 
             // Nuevos patrones de reemplazo
             .replace(/\/+\s*$/, '')          // Borrar / al final de la línea

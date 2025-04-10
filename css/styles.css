@@ -2103,3 +2103,42 @@ button, .nav-button, .btn-primary, .btn-secondary, .btn-success,
    15. Mensajes Interactivos
    ========================================== */
 /* Estilos para los diferentes tipos de jugadas */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.mensaje-container {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 9999;
+}
+
+.mensaje-exito, .mensaje-error {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.icono {
+    font-weight: bold;
+    font-size: 1.2em;
+}

@@ -781,8 +781,8 @@ function movil() {
         let mensajeVenta = document.getElementById('mensajeVenta').value;
 
         // IMPORTANTE: Asignar cada resultado de replace de vuelta a la variable
-        mensajeVenta = mensajeVenta.replace(/^\[.*?\]\s+([^\s]+)\s+(\d+)%\s+(Grupo\s+[^:]+):\s*/gmi, 'SMS:\n');
-        mensajeVenta = mensajeVenta.replace(/\[.+?\]\s+[a-zA-Z0-9 ]*:\s/gm, 'SMS:\n');
+        mensajeVenta = mensajeVenta.replace(/^\[.*?\]\s+([^\s]+)\s+(\d+)%\s+(Grupo\s+[^:]+):\s*/gmi, 'SMS\n');
+        mensajeVenta = mensajeVenta.replace(/\[.+?\]\s+[a-zA-Z0-9 ]*:\s/gm, 'SMS\n');
         mensajeVenta = mensajeVenta.replace(/\s*([-.:,;])\s*([PaL])/g, '$1$2');
         mensajeVenta = mensajeVenta.replace(/([PaL])\s*([-.:,;])\s*/g, '$1$2');
         mensajeVenta = mensajeVenta.replace(/[\*\+\_\¨\^\=\'\-]+(?:von|com|cin|vin|con|c|de)[\*\+\_\¨\^\=\'\-]+|[\*\+\_\¨\^\=\'\-]+(?:von|com|cin|vin|con|c|de)|(?:von|com|cin|vin|con|c|de)[\*\+\_\¨\^\=\'\-]+|\s+(?:von|com|cin|vin|con|c|de)\s+/gmi, '-con-')

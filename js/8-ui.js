@@ -1321,6 +1321,8 @@ function formatearJugadas(tipo, linea, jugadas, totalVenta, premioTotal, index, 
 // Exportar funciones para acceso global
 window.inicializarAplicacion = inicializarAplicacion;
 window.mostrarTooltip = mostrarTooltip;
+window.updateJefeInfo = updateJefeInfo;
+window.updateVendedorInfo = updateVendedorInfo;
 window.ocultarTooltip = ocultarTooltip;
 window.crearMensajesInteractivos = crearMensajesInteractivos;
 window.resaltarMensaje = resaltarMensaje;

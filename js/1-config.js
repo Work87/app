@@ -41,42 +41,39 @@ window.historialDatos = window.historialDatos || {
 /**
  * Función para guardar todos los datos en localStorage
  */
+// Función para guardar datos
 function guardarDatos() {
     try {
-        // Usar la función obtenerFechaFormateada para mantener consistencia
         const fechaActual = obtenerFechaFormateada();
         
+        // Verificar que las variables globales existan
+        if (typeof window.vendedores === 'undefined') window.vendedores = [];
+        if (typeof window.jefes === 'undefined') window.jefes = [];
+        if (typeof window.historialDatos === 'undefined') window.historialDatos = { fechas: {} };
+
         const datosActuales = {
-            vendedores: vendedores,
-            jefes: jefes,
+            vendedores: window.vendedores,
+            jefes: window.jefes,
             fecha: fechaActual,
             timestamp: new Date().getTime()
         };
-        
-        // Guardar en historial
-        historialDatos.fechas[fechaActual] = datosActuales;
-        historialDatos.ultimaActualizacion = fechaActual;
-        
-        // Limpiar datos antiguos (mantener solo los últimos 15 días)
-        const fechas = Object.keys(historialDatos.fechas).sort();
-        while (fechas.length > CONFIG.DIAS_HISTORICO) {
-            delete historialDatos.fechas[fechas.shift()];
-        }
-        
-        // Guardar datos actuales
+
+        // Guardar en localStorage
         localStorage.setItem('datosLoteria', JSON.stringify(datosActuales));
         
-        // Guardar historial
-        localStorage.setItem('historialLoteria', JSON.stringify(historialDatos));
-        
-        // Guardar vendedores
-        localStorage.setItem('vendedores', JSON.stringify(vendedores));
-        
+        // Mostrar mensaje visual usando la función existente
+        if (typeof window.mostrarMensaje === 'function') {
+            window.mostrarMensaje('Datos guardados correctamente', 'success');
+        }
+
         console.log("Datos guardados con fecha:", fechaActual);
-        mostrarMensaje('Datos guardados correctamente', 'success');
+        return true;
     } catch (error) {
         console.error('Error al guardar datos:', error);
-        mostrarMensaje('Error al guardar los datos', 'error');
+        if (typeof window.mostrarMensaje === 'function') {
+            window.mostrarMensaje('Error al guardar datos', 'error');
+        }
+        return false;
     }
 }
 
